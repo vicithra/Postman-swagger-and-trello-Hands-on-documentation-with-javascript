@@ -1,0 +1,1346 @@
+{
+	"info": {
+		"_postman_id": "0427766c-da08-4c55-9ab0-0b5893b75ff5",
+		"name": "Grocery store API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "29817011"
+	},
+	"item": [
+		{
+			"name": "Happy Path",
+			"item": [
+				{
+					"name": "Status",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", () => {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"const name= 'Rameshwaran';\r",
+									"pm.collectionVariables.set('firstname',name)"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{Grocery store API}}/status",
+							"host": [
+								"{{Grocery store API}}"
+							],
+							"path": [
+								"status"
+							],
+							"query": [
+								{
+									"key": "category",
+									"value": "coffee",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ALL Products",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", () => {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test('Atleeast one availabe product exizst',()=>\r",
+									"{\r",
+									"const response=pm.response.json();\r",
+									"pm.expect(response).to.be.an('array');\r",
+									"pm.expect(response.length).to.be.above(0);\r",
+									"const product=response[0];\r",
+									"pm.expect(product).to.haveOwnProperty('id')\r",
+									"pm.expect(product).to.be.an('object');\r",
+									"pm.expect(product.id).to.be.a('number')\r",
+									"pm.expect(product.inStock).to.be.true;\r",
+									"pm.collectionVariables.set('productId',product.id)\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{Grocery store API}}/products?available=true",
+							"host": [
+								"{{Grocery store API}}"
+							],
+							"path": [
+								"products"
+							],
+							"query": [
+								{
+									"key": "category",
+									"value": "eggs",
+									"disabled": true
+								},
+								{
+									"key": "results",
+									"value": "5",
+									"disabled": true
+								},
+								{
+									"key": "available",
+									"value": "true"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "single product",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", () => {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"const response=pm.response.json();\r",
+									"pm.test(\"Product Name\", () => {\r",
+									"    pm.expect(response.name).to.eql(\"Starbucks Coffee Variety Pack, 100% Arabica\")\r",
+									"    console.log(response.name)\r",
+									"});\r",
+									"pm.test(\"Product Category\", () => {\r",
+									"    pm.expect(response.category).to.eql(\"coffee\")\r",
+									"    console.log(response.category)\r",
+									"});\r",
+									"pm.test(\"Product Stock\", () => {\r",
+									"    pm.expect(response.inStock).to.be.true;\r",
+									"    console.log(response.inStock)\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{Grocery store API}}/products/:productId",
+							"host": [
+								"{{Grocery store API}}"
+							],
+							"path": [
+								"products",
+								":productId"
+							],
+							"query": [
+								{
+									"key": "results",
+									"value": "5",
+									"disabled": true
+								},
+								{
+									"key": "id",
+									"value": "4643",
+									"disabled": true
+								}
+							],
+							"variable": [
+								{
+									"key": "productId",
+									"value": "{{productId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "creat a cart",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", () => {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});\r",
+									"pm.test(\"Response has valid cartId\",()=>\r",
+									"{\r",
+									"const response=pm.response.json();\r",
+									"pm.expect(response).to.be.an(\"object\");\r",
+									"pm.expect(response).haveOwnProperty(\"cartId\");\r",
+									"pm.expect(response.cartId).is.to.be.a('string');\r",
+									"pm.collectionVariables.set(\"cartId\",response.cartId);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{Grocery store API}}/carts",
+							"host": [
+								"{{Grocery store API}}"
+							],
+							"path": [
+								"carts"
+							],
+							"query": [
+								{
+									"key": "category",
+									"value": "coffee",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get a cart",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", () => {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{Grocery store API}}/carts/:cartId",
+							"host": [
+								"{{Grocery store API}}"
+							],
+							"path": [
+								"carts",
+								":cartId"
+							],
+							"query": [
+								{
+									"key": "category",
+									"value": "coffee",
+									"disabled": true
+								}
+							],
+							"variable": [
+								{
+									"key": "cartId",
+									"value": "{{cartId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add items to the cart",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"item was created\",()=>\r",
+									"{\r",
+									"const response=pm.response.json();\r",
+									"pm.expect(response).is.to.be.an('object');\r",
+									"pm.expect(response.created).is.to.be.true;\r",
+									"pm.expect(response.itemId).is.to.be.a('number');\r",
+									"pm.collectionVariables.set('lastAddedItemID',response.itemId);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"cartId\":\"-lXvVJ-9ZdFtDwCyQZsAI\",\r\n    \"productId\":4643,\r\n    \"quantity\":4\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{Grocery store API}}/carts/:cartId/items",
+							"host": [
+								"{{Grocery store API}}"
+							],
+							"path": [
+								"carts",
+								":cartId",
+								"items"
+							],
+							"query": [
+								{
+									"key": "category",
+									"value": "coffee",
+									"disabled": true
+								}
+							],
+							"variable": [
+								{
+									"key": "cartId",
+									"value": "{{cartId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update cart quantity",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"function getRandomNumber(maxValue){\r",
+									"    return Math.floor(Math.random()*maxValue);\r",
+									"}\r",
+									"pm.collectionVariables.set('randomQuantity',getRandomNumber(14));"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"quantity\":{{randomQuantity}}\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{Grocery store API}}/carts/:cartId/items/:itemId",
+							"host": [
+								"{{Grocery store API}}"
+							],
+							"path": [
+								"carts",
+								":cartId",
+								"items",
+								":itemId"
+							],
+							"query": [
+								{
+									"key": "category",
+									"value": "coffee",
+									"disabled": true
+								}
+							],
+							"variable": [
+								{
+									"key": "cartId",
+									"value": "{{cartId}}"
+								},
+								{
+									"key": "itemId",
+									"value": "{{lastAddedItemID}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Replace product",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"productId\":4641,\r\n    \"quantity\":5\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{Grocery store API}}/carts/:cartId/items/:itemId",
+							"host": [
+								"{{Grocery store API}}"
+							],
+							"path": [
+								"carts",
+								":cartId",
+								"items",
+								":itemId"
+							],
+							"query": [
+								{
+									"key": "category",
+									"value": "coffee",
+									"disabled": true
+								}
+							],
+							"variable": [
+								{
+									"key": "cartId",
+									"value": "{{cartId}}"
+								},
+								{
+									"key": "itemId",
+									"value": "{{lastAddedItemID}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete an item",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"productId\":4641,\r\n    \"quantity\":5\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{Grocery store API}}/carts/:cartId/items/:itemId",
+							"host": [
+								"{{Grocery store API}}"
+							],
+							"path": [
+								"carts",
+								":cartId",
+								"items",
+								":itemId"
+							],
+							"query": [
+								{
+									"key": "category",
+									"value": "coffee",
+									"disabled": true
+								}
+							],
+							"variable": [
+								{
+									"key": "cartId",
+									"value": "{{cartId}}"
+								},
+								{
+									"key": "itemId",
+									"value": "718712357"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get cart items",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"cartId\":\"-lXvVJ-9ZdFtDwCyQZsAI\",\r\n    \"productId\":4643,\r\n    \"quantity\":4\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{Grocery store API}}/carts/:cartId",
+							"host": [
+								"{{Grocery store API}}"
+							],
+							"path": [
+								"carts",
+								":cartId"
+							],
+							"query": [
+								{
+									"key": "category",
+									"value": "coffee",
+									"disabled": true
+								}
+							],
+							"variable": [
+								{
+									"key": "cartId",
+									"value": "{{cartId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create an order",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Order was created\",()=>\r",
+									"{\r",
+									"  const response=pm.response.json();\r",
+									"  pm.expect(response).is.an('object');\r",
+									"  pm.expect(response.created).is.to.be.true;\r",
+									"  pm.expect(response.orderID).is.a('string');\r",
+									"  pm.collectionVariables.set('orderID',response.orderID);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{accessToken}}"
+							}
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "cc0663b870fda0a4dc407b2e015a5a4869a08f2a0c4348056624fd9b9cd4cc59",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"cartId\":\"{{cartId}}\",\r\n    \"customerName\":\"Vicithra\",\r\n    \"comment\":\"I love this product\"\r\n    \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{Grocery store API}}/orders?cartId={{cartId}}",
+							"host": [
+								"{{Grocery store API}}"
+							],
+							"path": [
+								"orders"
+							],
+							"query": [
+								{
+									"key": "category",
+									"value": "coffee",
+									"disabled": true
+								},
+								{
+									"key": "cartId",
+									"value": "{{cartId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update an order",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{accessToken}}"
+							}
+						},
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "cc0663b870fda0a4dc407b2e015a5a4869a08f2a0c4348056624fd9b9cd4cc59",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"customerName\":\"Rameshwaran Vicithra\",\r\n    \"comment\":\"I love this product\"\r\n    \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{Grocery store API}}/orders/:orderId",
+							"host": [
+								"{{Grocery store API}}"
+							],
+							"path": [
+								"orders",
+								":orderId"
+							],
+							"query": [
+								{
+									"key": "category",
+									"value": "coffee",
+									"disabled": true
+								}
+							],
+							"variable": [
+								{
+									"key": "orderId",
+									"value": "{{orderId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get an order",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Error message contains the deleted order id\",()=>\r",
+									"{\r",
+									"    const response=pm.response.json();\r",
+									"    pm.expect(response).haveOwnProperty('error')\r",
+									"   console.log(pm.collectionVariables.get('orderId'))\r",
+									"   pm.expect(response.error).to.contain(pm.collectionVariables.get('orderId'))\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{accessToken}}"
+							}
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "cc0663b870fda0a4dc407b2e015a5a4869a08f2a0c4348056624fd9b9cd4cc59",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"customerName\":\"Vicithra\",\r\n    \"comment\":\"I love this product\"\r\n    \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{Grocery store API}}/orders/:orderId",
+							"host": [
+								"{{Grocery store API}}"
+							],
+							"path": [
+								"orders",
+								":orderId"
+							],
+							"query": [
+								{
+									"key": "category",
+									"value": "coffee",
+									"disabled": true
+								}
+							],
+							"variable": [
+								{
+									"key": "orderId",
+									"value": "{{orderId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All order",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\",()=>\r",
+									"{\r",
+									"    pm.response.to.have.status(200);\r",
+									"})\r",
+									"pm.test(\"Created orderis in the list\",()=>\r",
+									"{\r",
+									"    const response=pm.response.json();\r",
+									"    for (i=0;i<response.length;i++){\r",
+									"        if(response[i].id===pm.collectionVariables.get('orderId')){\r",
+									"            console.log(\"Found it\")\r",
+									"        }\r",
+									"    }\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{accessToken}}"
+							}
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "cc0663b870fda0a4dc407b2e015a5a4869a08f2a0c4348056624fd9b9cd4cc59",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"customerName\":\"Vicithra\",\r\n    \"comment\":\"I love this product\"\r\n    \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{Grocery store API}}/orders",
+							"host": [
+								"{{Grocery store API}}"
+							],
+							"path": [
+								"orders"
+							],
+							"query": [
+								{
+									"key": "category",
+									"value": "coffee",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Register API Client",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"clientName\":\"Vicithra\",\r\n    \"clientEmail\":\"vicithra@gmail.com\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{Grocery store API}}/api-clients",
+							"host": [
+								"{{Grocery store API}}"
+							],
+							"path": [
+								"api-clients"
+							],
+							"query": [
+								{
+									"key": "category",
+									"value": "coffee",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Missing Authentication",
+			"item": [
+				{
+					"name": "Missing Header",
+					"item": [
+						{
+							"name": "Create an order-Missing Authorisation",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Error message\", ()=> {\r",
+											"    const response=pm.response.json();\r",
+											"    pm.expect(response.error).to.eql(\"Missing Authorization header.\");\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "cc0663b870fda0a4dc407b2e015a5a4869a08f2a0c4348056624fd9b9cd4cc59",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"cartId\":\"uklvAEaZg2LTTl0COZPD2\",\r\n    \"customerName\":\"Vicithra\",\r\n    \"comment\":\"I love this product\"\r\n    \r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{Grocery store API}}/orders",
+									"host": [
+										"{{Grocery store API}}"
+									],
+									"path": [
+										"orders"
+									],
+									"query": [
+										{
+											"key": "category",
+											"value": "coffee",
+											"disabled": true
+										},
+										{
+											"key": "cartId",
+											"value": null,
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get All order Copy- Missing Authorisation",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"\r",
+											"pm.test(\"Error message\", ()=> {\r",
+											"    const response=pm.response.json();\r",
+											"    pm.expect(response.error).to.eql(\"Missing Authorization header.\");\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "cc0663b870fda0a4dc407b2e015a5a4869a08f2a0c4348056624fd9b9cd4cc59",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"customerName\":\"Vicithra\",\r\n    \"comment\":\"I love this product\"\r\n    \r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{Grocery store API}}/orders/:orderId",
+									"host": [
+										"{{Grocery store API}}"
+									],
+									"path": [
+										"orders",
+										":orderId"
+									],
+									"query": [
+										{
+											"key": "category",
+											"value": "coffee",
+											"disabled": true
+										}
+									],
+									"variable": [
+										{
+											"key": "orderId",
+											"value": "{{orderId}}"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Invalid Token",
+					"item": [
+						{
+							"name": "Get All order Copy 2-Invalid Authorisation",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Error message\", ()=> {\r",
+											"    const response=pm.response.json();\r",
+											"    pm.expect(response.error).to.eql(\"Invalid bearer token.\");\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [
+									{
+										"warning": "This is a duplicate header and will be overridden by the Authorization header generated by Postman.",
+										"key": "Authorization",
+										"value": "acc0663b870fda0a4dc407b2e015a5a4869a08f2a0c4348056624fd9b9cd4cc59",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"customerName\":\"Vicithra\",\r\n    \"comment\":\"I love this product\"\r\n    \r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{Grocery store API}}/orders/:orderId",
+									"host": [
+										"{{Grocery store API}}"
+									],
+									"path": [
+										"orders",
+										":orderId"
+									],
+									"query": [
+										{
+											"key": "category",
+											"value": "coffee",
+											"disabled": true
+										}
+									],
+									"variable": [
+										{
+											"key": "orderId",
+											"value": "{{orderId}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create an order-Invalid Authorisation",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Error message\", ()=> {\r",
+											"    const response=pm.response.json();\r",
+											"    pm.expect(response.error).to.eql(\"Invalid bearer token.\");\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "cc0663b870fda0a4dc407b2e015aa5a4869a08f2a0c4348056624fd9b9cd4cc59",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"cartId\":\"uklvAEaZg2LTTl0COZPD2\",\r\n    \"customerName\":\"Vicithra\",\r\n    \"comment\":\"I love this product\"\r\n    \r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{Grocery store API}}/orders",
+									"host": [
+										"{{Grocery store API}}"
+									],
+									"path": [
+										"orders"
+									],
+									"query": [
+										{
+											"key": "category",
+											"value": "coffee",
+											"disabled": true
+										},
+										{
+											"key": "cartId",
+											"value": null,
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"Status code is 401\", function () {",
+							"    pm.response.to.have.status(401);",
+							"});"
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Invalid Inputs",
+			"item": [
+				{
+					"name": "ALL Products -Invalid Category",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400\", () => {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									"pm.test(\"Error message\", ()=> {\r",
+									"    const response=pm.response.json();\r",
+									"    pm.expect(response.error).to.have.string(\"Invalid value for query parameter \\'category\\'.\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{Grocery store API}}/products?category=Invalid Category",
+							"host": [
+								"{{Grocery store API}}"
+							],
+							"path": [
+								"products"
+							],
+							"query": [
+								{
+									"key": "category",
+									"value": "Invalid Category"
+								},
+								{
+									"key": "results",
+									"value": "5",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ALL Products -Invalid results(Maximum)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400\", () => {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									"pm.test(\"Error message\", ()=> {\r",
+									"    const response=pm.response.json();\r",
+									"    pm.expect(response.error).to.have.string(\"Invalid value for query parameter 'results'. Cannot be greater than 20\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{Grocery store API}}/products?category=coffee&results=21",
+							"host": [
+								"{{Grocery store API}}"
+							],
+							"path": [
+								"products"
+							],
+							"query": [
+								{
+									"key": "category",
+									"value": "coffee"
+								},
+								{
+									"key": "results",
+									"value": "21"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ALL Products -Invalid results(Minimum)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400\", () => {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									"pm.test(\"Error message\", ()=> {\r",
+									"    const response=pm.response.json();\r",
+									"    pm.expect(response.error).to.have.string(\"Invalid value for query parameter 'results'. Must be greater than 0.\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{Grocery store API}}/products?category=coffee&results=-1",
+							"host": [
+								"{{Grocery store API}}"
+							],
+							"path": [
+								"products"
+							],
+							"query": [
+								{
+									"key": "category",
+									"value": "coffee"
+								},
+								{
+									"key": "results",
+									"value": "-1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ALL Products -Results=0",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"console.log(pm.environment.name)\r",
+									"pm.test(\"Status code is 400\", () => {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									"pm.test(\"Error message\", ()=> {\r",
+									"    const response=pm.response.json();\r",
+									"    pm.expect(response.error).to.have.string(\"Invalid value for query parameter 'results'. Must be greater than 0.\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{Grocery store API}}/products?category=coffee&results=0",
+							"host": [
+								"{{Grocery store API}}"
+							],
+							"path": [
+								"products"
+							],
+							"query": [
+								{
+									"key": "category",
+									"value": "coffee"
+								},
+								{
+									"key": "results",
+									"value": "0"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "Grocery store API",
+			"value": "https://simple-grocery-store-api.glitch.me"
+		},
+		{
+			"key": "accessToken",
+			"value": "your token",
+			"type": "string"
+		},
+		{
+			"key": "cartId",
+			"value": ""
+		},
+		{
+			"key": "orderId",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "firstname",
+			"value": ""
+		},
+		{
+			"key": "productId",
+			"value": ""
+		},
+		{
+			"key": "lastAddedItemID",
+			"value": ""
+		},
+		{
+			"key": "randomQuantity",
+			"value": ""
+		}
+	]
+}
