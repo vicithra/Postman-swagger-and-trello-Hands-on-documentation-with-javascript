@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="Trello Project" tests="8" time="5.058">
+  <testsuite name="Get all boards" id="8229b41c-7642-483e-8cc3-03c3dfaf80ca" timestamp="2023-10-11T08:16:46.366Z" tests="1" failures="0" errors="0" time="0.639">
+    <testcase name="Status code is 200" time="0.639" classname="TrelloProject"/>
+  </testsuite>
+  <testsuite name="create a board" id="04827719-46e3-45d7-976a-4b496c36a1c6" timestamp="2023-10-11T08:16:46.366Z" tests="1" failures="0" errors="0" time="0.523">
+    <testcase name="Response is 200" time="0.523" classname="TrelloProject"/>
+  </testsuite>
+  <testsuite name="get single board with ID" id="5b73f13e-5cfa-421c-b7b5-364808876639" timestamp="2023-10-11T08:16:46.366Z" tests="1" failures="0" errors="0" time="0.398">
+    <testcase name="Status code is 200" time="0.398" classname="TrelloProject"/>
+  </testsuite>
+  <testsuite name="Creating to do list for a board" id="f2a82d0b-72ec-4d64-aed0-a40655c4749f" timestamp="2023-10-11T08:16:46.366Z" tests="1" failures="0" errors="0" time="0.451">
+    <testcase name="Status code is 200" time="0.451" classname="TrelloProject"/>
+  </testsuite>
+  <testsuite name="Creating done list for a board Copy" id="d97fe08b-d6ad-4b54-bdf1-c2681e0e56b5" timestamp="2023-10-11T08:16:46.366Z" tests="1" failures="0" errors="0" time="0.431">
+    <testcase name="Status code is 200" time="0.431" classname="TrelloProject"/>
+  </testsuite>
+  <testsuite name="Creating card within to do List" id="4cf968fb-4a14-4cee-90a1-ee086a19b854" timestamp="2023-10-11T08:16:46.366Z" tests="1" failures="0" errors="0" time="0.612">
+    <testcase name="Status code is 200" time="0.612" classname="TrelloProject"/>
+  </testsuite>
+  <testsuite name="Moving the card to Done List" id="3ce55f0b-910c-464f-bf05-e31749945a18" timestamp="2023-10-11T08:16:46.366Z" tests="0" failures="0" errors="0" time="0.481"/>
+  <testsuite name="Delete a board" id="81969d21-a580-4b5a-9a96-c46a84b45283" timestamp="2023-10-11T08:16:46.366Z" tests="1" failures="0" errors="0" time="1.523">
+    <testcase name="Status code is 200" time="1.523" classname="TrelloProject"/>
+  </testsuite>
+</testsuites>
